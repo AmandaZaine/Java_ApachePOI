@@ -1,12 +1,14 @@
 package com.amandazaine.ApachePOI;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PoiDemonstration {
@@ -64,7 +66,7 @@ public class PoiDemonstration {
         }
     }
 
-    public static void fillInFile(List<List<String>> content) throws IOException {
+    public static void fillInSheet(List<List<String>> content) throws IOException {
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet1 = workbook.createSheet("Sheet 1");
@@ -87,4 +89,105 @@ public class PoiDemonstration {
         fileOutputStream.close();
         System.out.println("File created");
     }
+
+    public static void formatDateInACell(List<List<String>> content) throws IOException, ParseException {
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet1 = workbook.createSheet("Sheet 1");
+
+        CellStyle cellStyle = workbook.createCellStyle();
+
+        DataFormat dataFormat = workbook.createDataFormat();
+        cellStyle.setDataFormat(dataFormat.getFormat("dd/MM/yyyy"));
+
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        cellStyle.setBorderBottom(BorderStyle.DOTTED);
+        cellStyle.setBottomBorderColor(IndexedColors.PINK.getIndex());
+        cellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        cellStyle.setFillBackgroundColor(IndexedColors.BLUE.getIndex());
+        cellStyle.setFillPattern(FillPatternType.FINE_DOTS);
+
+
+        for (int i = 0; i < content.size(); i++) {
+            Row row = sheet1.createRow(i);
+
+            for (int j = 0; j < content.get(i).size() ; j++) {
+                Cell cell = row.createCell(j);
+                SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+                cell.setCellValue(formatoData.parse(content.get(i).get(j)));
+                cell.setCellStyle(cellStyle);
+            }
+        }
+
+        String filePath = "/home/amanda/Documentos/myfile.xlsx";
+        File myFile = new File(filePath);
+
+        FileOutputStream fileOutputStream = new FileOutputStream(myFile);
+        workbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        System.out.println("File created");
+    }
+
+    public static void cellMerge(List<List<String>> content) throws IOException {
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet1 = workbook.createSheet("Sheet 1");
+
+        for (int i = 0; i < content.size(); i++) {
+            Row row = sheet1.createRow(i);
+
+            for (int j = 0; j < content.get(i).size() ; j++) {
+                Cell cell = row.createCell(j);
+                cell.setCellValue(content.get(i).get(j));
+            }
+        }
+
+        Row mergedRow = sheet1.getRow(1);
+        Cell mergedCell = mergedRow.createCell(content.getFirst().size() + 2);
+        mergedCell.setCellValue("Células mescladas!");
+
+        CellStyle cellStyle = workbook.createCellStyle();
+
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+        cellStyle.setBorderRight(BorderStyle.MEDIUM);
+        cellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+
+        cellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        Font font = workbook.createFont();
+        font.setBold(true);
+        font.setFontHeight(Short.parseShort("500"));
+        //font.setFontHeightInPoints((short) 15);
+        cellStyle.setFont(font);
+
+        mergedCell.setCellStyle(cellStyle);
+
+        //Mesclar células
+        sheet1.addMergedRegion(
+                new CellRangeAddress(
+                        1,
+                        10,
+                        content.getFirst().size() + 2,
+                        content.getFirst().size() + 5)
+        );
+
+        String filePath = "/home/amanda/Documentos/myfile.xlsx";
+        File myFile = new File(filePath);
+
+        FileOutputStream fileOutputStream = new FileOutputStream(myFile);
+        workbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        System.out.println("File created");
+    }
+
 }
