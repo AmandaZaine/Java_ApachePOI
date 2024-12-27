@@ -1,5 +1,6 @@
 package com.amandazaine.ApachePOI;
 
+import org.apache.commons.codec.DecoderException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,21 +10,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class ApachePoiApplication {
 
-	public static void main(String[] args) throws IOException, ParseException {
-		SpringApplication.run(ApachePoiApplication.class, args);
-		//PoiDemonstration.saveFile();
-		//PoiDemonstration.readFile();
+	public static void main(String[] args) throws IOException, ParseException, DecoderException {
+		//SpringApplication.run(ApachePoiApplication.class, args);
 
-		List<List<String>> dadosPessoais = listaDadosPessoais();
-		//PoiDemonstration.fillInSheet(dadosPessoais);
-
-		List<List<String>> datas = getListsOfDate();
-		//PoiDemonstration.formatDateInACell(datas);
-
-		PoiDemonstration.cellMerge(dadosPessoais);
+		PoiDemonstration.exercicio2();
 	}
 
 	private static List<List<String>> getListsOfDate() {

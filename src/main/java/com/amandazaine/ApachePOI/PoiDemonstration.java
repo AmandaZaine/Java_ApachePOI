@@ -1,12 +1,16 @@
 package com.amandazaine.ApachePOI;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -190,4 +194,134 @@ public class PoiDemonstration {
         System.out.println("File created");
     }
 
+    public static void exercicio1() throws IOException, DecoderException {
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        XSSFSheet sheet = workbook.createSheet("MySheet");
+        XSSFRow row = sheet.createRow(0);
+        XSSFCell cell = row.createCell(0);
+
+        //Configurando estilo da célula
+        XSSFCellStyle cellStyle = workbook.createCellStyle();
+
+        //Definindo cor de fundo
+        XSSFColor verdeClaro = criarCor("42f551");
+        cellStyle.setFillForegroundColor(verdeClaro);
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        //Definindo fonte
+        XSSFFont fonte = workbook.createFont();
+        fonte.setFontName("Montserrat Black");
+        fonte.setItalic(true);
+        fonte.setFontHeightInPoints((short) 25);
+        fonte.setColor(IndexedColors.DARK_GREEN.getIndex());
+        cellStyle.setFont(fonte);
+
+        //Definindo alinhamento do texto na celula
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        cell.setCellValue("Aprendendo Apache POI");
+        cell.setCellStyle(cellStyle);
+
+        //Configurando estilo da coluna
+        sheet.autoSizeColumn(0);
+
+        OutputStream outputStream = null;
+
+        try {
+            //Salva o conteúdo de um objeto do tipo Workbook em um arquivo Excel
+            outputStream = new FileOutputStream("/home/amanda/Documentos/novoarquivo.xlsx");
+            workbook.write(outputStream);
+            System.out.println("Arquivo Excel criado!");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            workbook.close();
+            outputStream.close();
+        }
+
+    }
+
+    private static XSSFColor criarCor(String corHexadecimal) throws DecoderException {
+        try {
+            byte[] rgb = Hex.decodeHex(corHexadecimal);
+            return new XSSFColor(rgb);
+        } catch (DecoderException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao criar cor");
+        }
+    }
+
+    public static void exercicio2() throws IOException, DecoderException {
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        XSSFSheet sheet = workbook.createSheet("MySheet");
+        XSSFRow row = sheet.createRow(2);
+        XSSFCell cell = row.createCell(2);
+
+        //Configurando estilo da célula
+        XSSFCellStyle cellStyle = workbook.createCellStyle();
+
+        //Definindo alinhamento do texto na celula
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        //Mesclando celulas
+        CellRangeAddress mesclagem = new CellRangeAddress(2,10,2,10);
+
+        cell.setCellValue("Aprendendo Apache POI");
+        cell.setCellStyle(cellStyle);
+
+        //Configurando estilo da coluna
+        sheet.autoSizeColumn(0);
+        sheet.addMergedRegion(mesclagem);
+
+        OutputStream outputStream = null;
+
+        try {
+            //Salva o conteúdo de um objeto do tipo Workbook em um arquivo Excel
+            outputStream = new FileOutputStream("/home/amanda/Documentos/novoarquivo.xlsx");
+            workbook.write(outputStream);
+            System.out.println("Arquivo Excel criado!");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            workbook.close();
+            outputStream.close();
+        }
+
+    }
+
+    public static void exercicio3() throws IOException, DecoderException {
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        XSSFSheet sheet = workbook.createSheet("MySheet");
+        XSSFRow row = sheet.createRow(0);
+        XSSFCell cell = row.createCell(0);
+
+        //Configurando o formato do dado da celula
+        XSSFCellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setDataFormat(workbook.createDataFormat().getFormat("dd/MM/yyyy HH:mm:ss"));
+
+        cell.setCellValue(LocalDateTime.now());
+        cell.setCellStyle(cellStyle);
+
+        OutputStream outputStream = null;
+
+        try {
+            outputStream = new FileOutputStream("/home/amanda/Documentos/novoarquivo.xlsx");
+            workbook.write(outputStream);
+            System.out.println("Arquivo Excel criado!");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            workbook.close();
+            outputStream.close();
+        }
+
+    }
 }
