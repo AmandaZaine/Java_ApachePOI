@@ -1,6 +1,9 @@
 package com.amandazaine.ApachePOI;
 
+import com.amandazaine.ApachePOI.model.Cliente;
+import com.amandazaine.ApachePOI.service.ClienteService;
 import org.apache.commons.codec.DecoderException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,13 +13,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.amandazaine.ApachePOI.mock.ClienteMock.getClientesMock;
+
 //@SpringBootApplication
 public class ApachePoiApplication {
 
 	public static void main(String[] args) throws IOException, ParseException, DecoderException {
 		//SpringApplication.run(ApachePoiApplication.class, args);
 
-		PoiDemonstration.exercicio2();
+		List<Cliente> clientes = getClientesMock();
+
+		ClienteService clienteService = new ClienteService();
+		clienteService.relatorioClientes(clientes);
+
 	}
 
 	private static List<List<String>> getListsOfDate() {

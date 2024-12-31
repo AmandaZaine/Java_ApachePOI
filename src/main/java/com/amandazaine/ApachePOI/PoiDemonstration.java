@@ -301,14 +301,19 @@ public class PoiDemonstration {
 
         XSSFSheet sheet = workbook.createSheet("MySheet");
         XSSFRow row = sheet.createRow(0);
-        XSSFCell cell = row.createCell(0);
+        XSSFCell cell0 = row.createCell(0);
+        XSSFCell cell1 = row.createCell(1);
 
         //Configurando o formato do dado da celula
-        XSSFCellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setDataFormat(workbook.createDataFormat().getFormat("dd/MM/yyyy HH:mm:ss"));
+        XSSFCellStyle cellStyle0 = workbook.createCellStyle();
+        cellStyle0.setDataFormat(workbook.createDataFormat().getFormat("dd/MM/yyyy HH:mm:ss"));
+        cell0.setCellValue(LocalDateTime.now());
+        cell0.setCellStyle(cellStyle0);
 
-        cell.setCellValue(LocalDateTime.now());
-        cell.setCellStyle(cellStyle);
+        XSSFCellStyle cellStyle1 = workbook.createCellStyle();
+        cellStyle1.setDataFormat(workbook.createDataFormat().getFormat("0%"));
+        cell1.setCellValue("0.5");
+        cell1.setCellStyle(cellStyle1);
 
         OutputStream outputStream = null;
 
@@ -322,6 +327,10 @@ public class PoiDemonstration {
             workbook.close();
             outputStream.close();
         }
+
+    }
+
+    public static void exercicio4() {
 
     }
 }
