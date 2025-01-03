@@ -12,13 +12,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class ClienteService {
 
-    public void relatorioClientes(List<Cliente> clientes) {
+    public void gerarRelatorioClientes(List<Cliente> clientes) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Clientes");
 

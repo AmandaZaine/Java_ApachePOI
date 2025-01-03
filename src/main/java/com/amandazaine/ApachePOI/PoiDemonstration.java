@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class PoiDemonstration {
@@ -330,7 +331,24 @@ public class PoiDemonstration {
 
     }
 
-    public static void exercicio4() {
+    public static void lerColunasArqXlsx() {
+        File arquivo = new File("/home/amanda/Documentos/Exercicio_Apache_Poi.xlsx");
 
+        try (InputStream input = new FileInputStream(arquivo)) {
+            XSSFWorkbook workbook = new XSSFWorkbook(input);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+
+            Iterator<Row> linhas = sheet.rowIterator();
+
+            Cell coluna = null;
+
+            while(linhas.hasNext()) {
+                coluna = linhas.next().getCell(0);
+                System.out.println(coluna.toString());
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
