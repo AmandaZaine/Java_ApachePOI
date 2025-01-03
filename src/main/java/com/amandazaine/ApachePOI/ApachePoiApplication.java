@@ -18,7 +18,7 @@ import static com.amandazaine.ApachePOI.mock.ClienteMock.getClientesMock;
 //@SpringBootApplication
 public class ApachePoiApplication {
 
-	public static void main(String[] args) throws IOException, ParseException, DecoderException {
+	public static void main(String[] args) {
 		//SpringApplication.run(ApachePoiApplication.class, args);
 
 		List<Cliente> clientes = getClientesMock();
